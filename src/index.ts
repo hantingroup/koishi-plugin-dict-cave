@@ -10,6 +10,10 @@ import { shortcut } from 'koishi-plugin-montmorill'
 
 const logger = new Logger('dict-cave')
 
+function escapeMarkdown(text: string): string {
+  return text.replace(/[\\`*_#+\-.]/g, match => `\\${match}`)
+}
+
 class CaveDictSource extends DictSource {
   caves: string[] = []
 
@@ -23,7 +27,7 @@ class CaveDictSource extends DictSource {
         const cave = Random.pick(this.caves)
         return h(
           'qq:markdown',
-          reversed ? cave.split('').reverse().join('') : cave,
+          escapeMarkdown(reversed ? cave.split('').reverse().join('') : cave),
           `\n> 再来一次 👉 ${shortcut(session.isDirect, reversed ? 'yrovl' : 'lvory')}`,
         )
       }
@@ -42,7 +46,7 @@ class CaveDictSource extends DictSource {
         await appendFile(filename, stringify([[content, session?.userId]]))
         return h(
           'qq:markdown',
-          content,
+          escapeMarkdown(content),
           `\n> 再来一次 👉 ${shortcut(session?.isDirect, 'lvory')}`,
         )
       })
