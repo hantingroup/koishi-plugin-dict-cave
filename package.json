@@ -1,5 +1,5 @@
 {
-  "name": "koishi-plugin-cave",
+  "name": "koishi-plugin-dict-cave",
   "version": "0.0.1",
   "description": "",
   "typings": "lib/index.d.ts",

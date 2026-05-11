@@ -7,7 +7,7 @@ import { h, Logger, Random, Schema } from 'koishi'
 import { DictSource } from 'koishi-plugin-dict'
 import { shortcut } from 'koishi-plugin-montmorill'
 
-const logger = new Logger('cave')
+const logger = new Logger('dict-cave')
 
 class CaveDictSource extends DictSource {
   caves: string[] = []
