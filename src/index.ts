@@ -15,8 +15,6 @@ class CaveDictSource extends DictSource {
   constructor(ctx: Context, public config: CaveDictSource.Config) {
     super(ctx)
 
-    this.load()
-
     config.lvory && ctx.middleware(async (session, next) => {
       const content = session.content || ''
       const reversed = content.toLowerCase().includes('yrovl')
@@ -30,21 +28,25 @@ class CaveDictSource extends DictSource {
       }
       return next()
     })
-  }
 
-  async load() {
-    const parser = parse({ columns: true })
-    parser.on('readable', () => {
-      let record = parser.read()
-      while (record !== null) {
-        this.caves.push(record.content)
-        record = parser.read()
-      }
+    ctx.on('ready', async () => {
+      const parser = parse({ columns: true })
+      parser.on('readable', () => {
+        let record = parser.read()
+        while (record !== null) {
+          this.caves.push(record.content)
+          record = parser.read()
+        }
+      })
+      parser.write(await readFile(path.join(this.ctx.baseDir, 'data', 'cave.csv')))
+      parser.end(() => {
+        logger.info(`loaded ${this.caves.length} caves.`)
+        this.ctx.emit('dict-added', this.config.name)
+      })
     })
-    parser.write(await readFile(path.join(this.ctx.baseDir, 'data', 'cave.csv')))
-    parser.end(() => {
-      logger.info(`loaded ${this.caves.length} caves.`)
-      this.ctx.emit('dict-added', this.config.name)
+
+    this.ctx.on('dispose', () => {
+      this.ctx.emit('dict-removed', this.config.name)
     })
   }
 
