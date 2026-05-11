@@ -33,7 +33,7 @@ class CaveDictSource extends DictSource {
     const filename = path.join(this.ctx.baseDir, 'data', config.filename)
 
     ctx.command('say <message:text>', '海狶说')
-      .alias('你嘻', '说', '你狶')
+      .alias('说', '你嘻', '你囍', '你狶')
       .action(async ({ session }, message) => {
         const content = message.trim()
         if (!content)
