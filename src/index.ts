@@ -1,8 +1,9 @@
 import type { Context } from 'koishi'
-import { readFile } from 'node:fs/promises'
+import { appendFile, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import {} from '@koishijs/plugin-help'
 import { parse } from 'csv-parse'
+import { stringify } from 'csv-stringify/sync'
 import { h, Logger, Random, Schema } from 'koishi'
 import { DictSource } from 'koishi-plugin-dict'
 import { shortcut } from 'koishi-plugin-montmorill'
@@ -29,6 +30,23 @@ class CaveDictSource extends DictSource {
       return next()
     })
 
+    const filename = path.join(this.ctx.baseDir, 'data', config.filename)
+
+    ctx.command('say <message:text>', '海狶说')
+      .alias('你嘻', '说', '你狶')
+      .action(async ({ session }, message) => {
+        const content = message.trim()
+        if (!content)
+          return '你倒是狶啊。'
+        this.caves.push(content)
+        await appendFile(filename, stringify([[content, session?.userId]]))
+        return h(
+          'qq:markdown',
+          content,
+          `\n> 再来一次 👉 ${shortcut(session?.isDirect, 'lvory')}`,
+        )
+      })
+
     ctx.on('ready', async () => {
       const parser = parse({ columns: true })
       parser.on('readable', () => {
@@ -38,7 +56,7 @@ class CaveDictSource extends DictSource {
           record = parser.read()
         }
       })
-      parser.write(await readFile(path.join(this.ctx.baseDir, 'data', 'cave.csv')))
+      parser.write(await readFile(filename))
       parser.end(() => {
         logger.info(`loaded ${this.caves.length} caves.`)
         this.ctx.emit('dict-added', this.config.name)
