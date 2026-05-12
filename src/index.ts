@@ -4,15 +4,10 @@ import path from 'node:path'
 import {} from '@koishijs/plugin-help'
 import { parse } from 'csv-parse'
 import { stringify } from 'csv-stringify/sync'
-import { h, Logger, Random, Schema } from 'koishi'
+import { Logger, Random, Schema } from 'koishi'
 import { DictSource } from 'koishi-plugin-dict'
-import { shortcut } from 'koishi-plugin-montmorill'
 
 const logger = new Logger('dict-cave')
-
-function escapeMarkdown(text: string): string {
-  return text.replace(/[\\`*_#+\-.]/g, match => `\\${match}`)
-}
 
 class CaveDictSource extends DictSource {
   caves: string[] = []
@@ -25,11 +20,7 @@ class CaveDictSource extends DictSource {
       const reversed = content.toLowerCase().includes('yrovl')
       if (reversed || content.toLowerCase().includes('lvory')) {
         const cave = Random.pick(this.caves)
-        return h(
-          'qq:markdown',
-          escapeMarkdown(reversed ? cave.split('').reverse().join('') : cave),
-          `\n> 再来一次 👉 ${shortcut(session.isDirect, reversed ? 'yrovl' : 'lvory')}`,
-        )
+        return reversed ? cave.split('').reverse().join('') : cave
       }
       return next()
     })
@@ -44,11 +35,7 @@ class CaveDictSource extends DictSource {
           return '你倒是狶啊。'
         this.caves.push(content)
         await appendFile(filename, stringify([[content, session?.userId]]))
-        return h(
-          'qq:markdown',
-          escapeMarkdown(content),
-          `\n> 再来一次 👉 ${shortcut(session?.isDirect, 'lvory')}`,
-        )
+        return content
       })
 
     ctx.on('ready', async () => {
