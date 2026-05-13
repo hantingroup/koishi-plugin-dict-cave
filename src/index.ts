@@ -10,6 +10,7 @@ import { DictSource } from 'koishi-plugin-dict'
 const logger = new Logger('dict-cave')
 
 class CaveDictSource extends DictSource {
+  static name = 'dict-cave'
   caves: string[] = []
 
   constructor(ctx: Context, public config: CaveDictSource.Config) {
