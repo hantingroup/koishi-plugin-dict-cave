@@ -50,7 +50,7 @@ class CaveDictSource extends DictSource {
       })
       parser.write(await readFile(filename))
       parser.end(() => {
-        logger.info(`loaded ${this.caves.length} caves.`)
+        logger.info(`loaded ${this.caves.length} caves`)
         this.ctx.emit('dict-added', this.config.name)
       })
     })
