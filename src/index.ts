@@ -33,7 +33,7 @@ class CaveDictSource extends DictSource {
       .action(async ({ session }, message) => {
         const content = message.trim()
         if (!content)
-          return '你倒是狶啊。'
+          return '你倒是狶啊'
         this.caves.push(content)
         await appendFile(filename, stringify([[content, session?.userId]]))
         return content
@@ -74,8 +74,8 @@ namespace CaveDictSource {
 
   export const Config: Schema<Config> = Schema.object({
     lvory: Schema.boolean().default(true).description('牢瑞！'),
-    name: Schema.string().default('lvory').description('字典名称。'),
-    filename: Schema.string().default('cave.csv').description('字典文件名。'),
+    name: Schema.string().default('lvory').description('字典名称'),
+    filename: Schema.string().default('cave.csv').description('字典文件名'),
   })
 }
 
