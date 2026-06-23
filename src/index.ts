@@ -31,7 +31,7 @@ class CaveDictSource extends DictSource {
     ctx.command('say <message:text>', '海狶说')
       .alias('说', '你嘻', '你囍', '你狶')
       .action(async ({ session }, message) => {
-        const content = message.trim()
+        const content = message?.trim()
         if (!content)
           return '你倒是狶啊'
         this.caves.push(content)
