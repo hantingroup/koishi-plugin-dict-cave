@@ -4,10 +4,8 @@ import path from 'node:path'
 import {} from '@koishijs/plugin-help'
 import { parse } from 'csv-parse'
 import { stringify } from 'csv-stringify/sync'
-import { Logger, Random, Schema } from 'koishi'
+import { Random, Schema } from 'koishi'
 import { DictSource } from 'koishi-plugin-dict'
-
-const logger = new Logger('dict-cave')
 
 class CaveDictSource extends DictSource {
   static name = 'dict-cave'
@@ -50,7 +48,7 @@ class CaveDictSource extends DictSource {
       })
       parser.write(await readFile(filename))
       parser.end(() => {
-        logger.info(`loaded ${this.caves.length} caves`)
+        ctx.logger.info(`loaded ${this.caves.length} caves`)
         this.ctx.emit('dict-added', this.config.name)
       })
     })
