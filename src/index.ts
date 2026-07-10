@@ -67,7 +67,7 @@ namespace CaveDictSource {
 
   export const Config: Schema<Config> = Schema.object({
     lvory: Schema.boolean().default(true).description('牢瑞！'),
-    name: Schema.string().default('lvory').description('字典名称。'),
+    name: Schema.string().default('你囍').description('字典名称。'),
     filename: Schema.string().default('cave.csv').description('字典文件名。'),
   })
 }
