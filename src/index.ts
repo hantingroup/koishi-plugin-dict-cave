@@ -51,7 +51,7 @@ class CaveDictSource extends DictSource {
     })
   }
 
-  override async* availables() { yield this.config.name }
+  override async* entries() { yield this.config.name }
 
   override lookupSync(name: string): string[] {
     return name === this.config.name ? this.caves : []
