@@ -47,16 +47,11 @@ class CaveDictSource extends DictSource {
         }
       })
       parser.write(await readFile(filename))
-      parser.end(() => {
-        ctx.logger.info(`loaded ${this.caves.length} caves`)
-        this.ctx.emit('dict-added', this.config.name)
-      })
-    })
-
-    this.ctx.on('dispose', () => {
-      this.ctx.emit('dict-removed', this.config.name)
+      parser.end(() => ctx.logger.info(`loaded ${this.caves.length} caves`))
     })
   }
+
+  override async* availables() { yield this.config.name }
 
   override lookupSync(name: string): string[] {
     return name === this.config.name ? this.caves : []
